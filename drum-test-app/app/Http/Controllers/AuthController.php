@@ -22,7 +22,9 @@ class AuthController extends Controller
     public function register(RegisterRequest $request): JsonResponse
     {
         $registerUserDTO = RegisterUserDTO::fromRequest($request);
-        return $this->authService->register($registerUserDTO);
+        $token = $this->authService->register($registerUserDTO);
+
+        return response()->json(['access_token' => $token, 'token_type' => 'Bearer']);
     }
 
     public function login(LoginRequest $request): JsonResponse
@@ -32,8 +34,9 @@ class AuthController extends Controller
         }
 
         $loginUserDTO = LoginUserDTO::fromRequest($request);
+        $token = $this->authService->login($loginUserDTO);
 
-        return $this->authService->login($loginUserDTO);
+        return response()->json(['access_token' => $token, 'token_type' => 'Bearer']);
     }
 
     public function logout(Request $request): JsonResponse

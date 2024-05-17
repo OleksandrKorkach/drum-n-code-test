@@ -20,24 +20,22 @@ class AuthService
         $this->userRepository = $userRepository;
     }
 
-    public function register(RegisterUserDTO $dto): JsonResponse
+    public function register(RegisterUserDTO $dto): string
     {
         $userData = $dto->toArray();
         $userData['password'] = $this->getHashedPassword($userData['password']);
 
         $user = $this->userRepository->create($userData);
 
-        $token = $this->createAuthToken($user);
-        return response()->json(['access_token' => $token, 'token_type' => 'Bearer']);
+        return $this->createAuthToken($user);
     }
 
-    public function login(LoginUserDTO $dto): JsonResponse
+    public function login(LoginUserDTO $dto): string
     {
         $userData = $dto->toArray();
         $user = $this->userRepository->getByEmail($userData['email']);
-        $token = $this->createAuthToken($user);
 
-        return response()->json(['access_token' => $token, 'token_type' => 'Bearer']);
+        return $this->createAuthToken($user);
     }
 
     public function logout(Request $request): void
