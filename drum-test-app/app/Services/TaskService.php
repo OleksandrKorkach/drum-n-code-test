@@ -19,10 +19,10 @@ class TaskService
         $this->taskRepository = $taskRepository;
     }
 
-    public function getAuthUserTasks(): Collection|array
+    public function getAuthUserTasks(array $filters): Collection|array
     {
         $userId = Auth::id();
-        return $this->taskRepository->getUserTasks($userId);
+        return $this->taskRepository->getUserTasks($userId, $filters);
     }
 
     public function storeTask(StoreTaskDTO $storeTaskDTO)

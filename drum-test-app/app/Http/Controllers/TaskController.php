@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\DTOs\Task\StoreTaskDTO;
 use App\DTOs\Task\UpdateTaskDTO;
 use App\Http\Requests\Task\DestroyTaskRequest;
+use App\Http\Requests\Task\GetTasksRequest;
 use App\Http\Requests\Task\SetTaskCompletedRequest;
 use App\Http\Requests\Task\StoreTaskRequest;
 use App\Http\Requests\Task\UpdateTaskRequest;
@@ -20,9 +21,9 @@ class TaskController extends Controller
         $this->taskService = $taskService;
     }
 
-    public function index(): JsonResponse
+    public function index(GetTasksRequest $request): JsonResponse
     {
-        $tasks = $this->taskService->getAuthUserTasks();
+        $tasks = $this->taskService->getAuthUserTasks($request->all());
         return response()->json($tasks);
     }
 
