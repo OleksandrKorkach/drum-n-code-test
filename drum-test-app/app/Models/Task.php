@@ -11,6 +11,18 @@ class Task extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'title',
+        'description',
+        'priority',
+        'status_id',
+        'user_id',
+        'task_id',
+        'completed_at',
+        'created_at',
+        'updated_at',
+    ];
+
     public function status(): BelongsTo
     {
         return $this->belongsTo(TaskStatus::class, 'status_id');
@@ -29,5 +41,11 @@ class Task extends Model
     public function subtasks(): HasMany
     {
         return $this->hasMany(Task::class, 'task_id');
+    }
+
+    public function loadSubtasksRecursively(): void
+    {
+        $this->load('subtasks');
+        $this->subtasks->each->loadSubtasksRecursively();
     }
 }
